@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "615391515799",
+    "project_id": "parallel-score-chat",
+    "storage_bucket": "parallel-score-chat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:615391515799:android:042ba82b54e8dcaf49c5d2",
+        "android_client_info": {
+          "package_name": "com.example.parallel_score_chat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "615391515799-qhcuu32hignkdjejpl7qosv8eigsaorj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCeo5JImjumyUQ2dUu9ZndP141LMEKbsfA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "615391515799-qhcuu32hignkdjejpl7qosv8eigsaorj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
