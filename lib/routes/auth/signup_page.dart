@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:lottie/lottie.dart';
+import 'package:parallel_score_chat/routes/chat/chat_room_page.dart';
 import 'package:parallel_score_chat/services/authentication.dart';
-
+import 'package:parallel_score_chat/services/database.dart';
 import '../../helpers/constants.dart';
 import '../../helpers/outline_input_border.dart';
 import '../../widgets/widget_appbar.dart';
 class SignUpPage extends StatefulWidget {
-  const SignUpPage({Key? key}) : super(key: key);
+  final Function toggle;
+  const SignUpPage({Key? key, required this.toggle}) : super(key: key);
 
   @override
   _SignUpPageState createState() => _SignUpPageState();
@@ -15,12 +17,14 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
 
+  // Loading state of the signup page
   bool isLoading = false;
 
   // Key which validates the TextFormField inputs
   final formKey = GlobalKey<FormState>();
 
   AuthenticationService authenticationService = AuthenticationService();
+  DatabaseService databaseService = DatabaseService();
 
   // Text-Editing controllers for input fields on registration
   TextEditingController emailTextEditingController = TextEditingController();
@@ -28,14 +32,26 @@ class _SignUpPageState extends State<SignUpPage> {
   TextEditingController passwordTextEditingController = TextEditingController();
   TextEditingController reEnterPasswordTextEditingController = TextEditingController();
 
+  // If form-key is validated, it sets the state of the isLoading to true and
+  // signs up the user with details provided.
   signUserUp(){
     if (formKey.currentState!.validate()){
+
+      Map <String, String> userInfoMap = {
+        "username" : userNameTextEditingController.text,
+        "email" : emailTextEditingController.text
+      };
+
       setState(() {
         isLoading = true;
       });
       authenticationService.signUpWithEmailAndPassword(emailTextEditingController.text, reEnterPasswordTextEditingController.text)
-          .then((value) => print("$value"));
-    };
+          .then((value){
+
+            databaseService.uploadUserInfo(userInfoMap);
+        Navigator.pushReplacement(context, MaterialPageRoute(
+            builder: (context) => ChatRoomPage() ));}
+      );};
   }
 
   @override
@@ -111,7 +127,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     obscureText: true,
                     validator: (value){
                       return value!.length > 6 &&
-                          passwordTextEditingController == reEnterPasswordTextEditingController ?
+                          passwordTextEditingController.text == reEnterPasswordTextEditingController.text ?
                       null : "Password does not match";
                     },
                     controller: reEnterPasswordTextEditingController,
@@ -176,15 +192,20 @@ class _SignUpPageState extends State<SignUpPage> {
               SizedBox(height: 8,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
+                children: [
                   Text("Already have an account? ", style: TextStyle(
                       fontSize: 14
                   ),),
-                  Text("Sign In", style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      decoration: TextDecoration.underline
-                  ),)
+                  GestureDetector(
+                    onTap: (){
+                      widget.toggle;
+                    },
+                    child: Text("Sign In", style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.underline
+                    ),),
+                  )
                 ],
               ),
             ],

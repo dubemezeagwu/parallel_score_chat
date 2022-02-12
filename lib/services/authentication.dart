@@ -40,7 +40,7 @@ class AuthenticationService{
     }
   }
 
-  // Reset the user password.
+  // Reset the user's password.
   Future resetPassword (String email) async {
     try{
       return await _auth.sendPasswordResetEmail(email: email);
@@ -49,6 +49,7 @@ class AuthenticationService{
     }
   }
 
+  // Sign the user out.
   Future signOut () async {
     try{
       return await _auth.signOut();

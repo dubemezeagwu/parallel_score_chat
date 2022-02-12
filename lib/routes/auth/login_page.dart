@@ -4,8 +4,10 @@ import 'package:lottie/lottie.dart';
 import 'package:parallel_score_chat/widgets/widget_appbar.dart';
 import '../../helpers/constants.dart';
 import '../../helpers/outline_input_border.dart';
+
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  final Function toggle;
+  const LoginPage({Key? key, required this.toggle}) : super(key: key);
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -105,15 +107,20 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(height: 8,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
+                children:  [
                   Text("Do not have an account? ", style: TextStyle(
                     fontSize: 14
                   ),),
-                  Text("Register Now", style: TextStyle(
-                    fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      decoration: TextDecoration.underline
-                  ),)
+                  GestureDetector(
+                    onTap: (){
+                      widget.toggle;
+                    },
+                    child: Text("Register Now", style: TextStyle(
+                      fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.underline
+                    ),),
+                  )
                 ],
               ),
             ],
