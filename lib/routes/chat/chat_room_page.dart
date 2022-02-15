@@ -4,9 +4,11 @@ import 'package:parallel_score_chat/routes/auth/login_page.dart';
 import 'package:parallel_score_chat/routes/chat/search_users.dart';
 import 'package:parallel_score_chat/services/authentication.dart';
 import '../../helpers/constants.dart';
+import '../../widgets/widget_reusable_card.dart';
 
 class ChatRoomPage extends StatefulWidget {
-  const ChatRoomPage({Key? key}) : super(key: key);
+  const ChatRoomPage({Key? key, required this.toggle}) : super(key: key);
+  final Function toggle;
 
   @override
   _ChatRoomPageState createState() => _ChatRoomPageState();
@@ -34,7 +36,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
             onTap: (){
               _authenticationService.signOut();
               Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder:(context) => AuthenticateWidget() ));
+                  MaterialPageRoute(builder:(context) => LoginPage(toggle: widget.toggle) ));
             },
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: defaultPadding),
@@ -42,6 +44,16 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                   Icons.exit_to_app,color: Colors.black,)),
           )
         ],
+      ),
+      body: Center(
+        child: ReusableCard(
+          child: Column(
+            children: <Widget>[
+              Text("developer.school"),
+              Text("Jason")
+            ],
+          ),
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

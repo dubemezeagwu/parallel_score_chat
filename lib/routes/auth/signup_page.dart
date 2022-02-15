@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:lottie/lottie.dart';
+import 'package:parallel_score_chat/helpers/shared_preferences_helper.dart';
+import 'package:parallel_score_chat/routes/auth/login_page.dart';
 import 'package:parallel_score_chat/routes/chat/chat_room_page.dart';
 import 'package:parallel_score_chat/services/authentication.dart';
 import 'package:parallel_score_chat/services/database.dart';
@@ -36,21 +38,22 @@ class _SignUpPageState extends State<SignUpPage> {
   // signs up the user with details provided.
   signUserUp(){
     if (formKey.currentState!.validate()){
-
       Map <String, String> userInfoMap = {
         "username" : userNameTextEditingController.text,
         "email" : emailTextEditingController.text
       };
 
+      SharedPreferencesHelper.saveUserEmailSharedPreferences(emailTextEditingController.text);
+      SharedPreferencesHelper.saveUserNameSharedPreferences(userNameTextEditingController.text);
       setState(() {
         isLoading = true;
       });
       authenticationService.signUpWithEmailAndPassword(emailTextEditingController.text, reEnterPasswordTextEditingController.text)
           .then((value){
-
             databaseService.uploadUserInfo(userInfoMap);
+            SharedPreferencesHelper.saveUserLoggedInSharedPreferences(true);
         Navigator.pushReplacement(context, MaterialPageRoute(
-            builder: (context) => ChatRoomPage() ));}
+            builder: (context) => ChatRoomPage(toggle: widget.toggle,) ));}
       );};
   }
 
@@ -198,7 +201,10 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),),
                   GestureDetector(
                     onTap: (){
-                      widget.toggle;
+                      Navigator.pushReplacement(
+                          context, MaterialPageRoute(
+                          builder: (context) => LoginPage(toggle: widget.toggle,))
+                      );
                     },
                     child: Text("Sign In", style: TextStyle(
                         fontSize: 14,
